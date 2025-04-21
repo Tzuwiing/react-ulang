@@ -4,9 +4,10 @@ import "./index.css";
 
 import Project from "./projek/projek.jsx";
 import Navbar from "./projek/projek.jsx";
+import App from "./projek/projek.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Navbar />
+    <App />
   </StrictMode>
 );
