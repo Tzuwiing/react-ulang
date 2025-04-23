@@ -1,18 +1,25 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-scroll";
+import {
+  FaInstagram,
+  FaFacebookF,
+  FaYoutube,
+  FaMapMarkerAlt,
+  FaEnvelope,
+} from "react-icons/fa";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
-  // Menutup menu jika ada klik di luar area hamburger
+  // Tutup menu saat klik di luar menu
   const handleOutsideClick = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target)) {
       setIsMenuOpen(false);
     }
   };
 
-  // Menambahkan event listener untuk klik luar saat komponen di-mount dan membersihkannya saat komponen di-unmount
   useEffect(() => {
     document.addEventListener("mousedown", handleOutsideClick);
     return () => {
@@ -20,37 +27,56 @@ export function Navbar() {
     };
   }, []);
 
+  const navLinks = [
+    { id: "home", label: "Home" },
+    { id: "galeri", label: "Galeri" },
+    { id: "tentang", label: "Tentang" },
+    { id: "wahana", label: "Wahana" },
+    { id: "tiket", label: "Tiket" },
+    { id: "kontak", label: "Kontak" },
+  ];
+
   return (
     <nav className="w-full flex items-center justify-between px-8 py-6 shadow-md bg-white sticky top-0 z-50">
       {/* Logo */}
-      <div className="text-3xl font-bold text-blue-600">MyLogo</div>
+      <Link
+        to="home"
+        smooth={true}
+        duration={500}
+        offset={-70}
+        className="text-3xl font-bold text-blue-600 cursor-pointer"
+      >
+        MyLogo
+      </Link>
 
-      {/* Navigation Menu */}
+      {/* Desktop Navigation */}
       <ul className="hidden md:flex gap-10 text-lg text-gray-700 font-semibold mx-auto">
-        <li className="hover:text-blue-600 transition-colors cursor-pointer">
-          Home
-        </li>
-        <li className="hover:text-blue-600 transition-colors cursor-pointer">
-          About
-        </li>
-        <li className="hover:text-blue-600 transition-colors cursor-pointer">
-          Gallery
-        </li>
-        <li className="hover:text-blue-600 transition-colors cursor-pointer">
-          Contact
-        </li>
+        {navLinks.map((link) => (
+          <Link
+            key={link.id}
+            to={link.id}
+            smooth={true}
+            offset={-70}
+            duration={500}
+            className="cursor-pointer hover:text-blue-600"
+          >
+            {link.label}
+          </Link>
+        ))}
       </ul>
 
-      {/* Pesan Tiket Button (Desktop) */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="hidden md:block bg-blue-600 hover:bg-blue-700 text-white text-lg px-6 py-3 rounded-xl shadow transition-shadow"
-      >
-        Pesan Tiket
-      </motion.button>
+      {/* Tombol Tiket (Desktop) */}
+      <Link to="tiket" smooth={true} offset={-70} duration={500}>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="hidden md:block bg-blue-600 hover:bg-blue-700 text-white text-lg px-6 py-3 rounded-xl shadow transition-shadow"
+        >
+          Pesan Tiket
+        </motion.button>
+      </Link>
 
-      {/* Hamburger Menu (Mobile) */}
+      {/* Hamburger Button (Mobile) */}
       <div className="md:hidden flex items-center">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -75,46 +101,64 @@ export function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <div
         ref={menuRef}
         className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-50 transition-all ${
           isMenuOpen ? "block" : "hidden"
         }`}
-        onClick={() => setIsMenuOpen(false)} // Close the menu if the background is clicked
       >
         <div className="flex justify-center items-center w-full h-full">
-          <div className="bg-white p-6 rounded-lg w-4/5">
+          <div className="bg-white p-6 rounded-lg w-4/5 space-y-6">
             <ul className="flex flex-col items-center gap-4">
-              <li className="text-xl text-gray-700 hover:text-blue-600 cursor-pointer">
-                Home
-              </li>
-              <li className="text-xl text-gray-700 hover:text-blue-600 cursor-pointer">
-                About
-              </li>
-              <li className="text-xl text-gray-700 hover:text-blue-600 cursor-pointer">
-                Gallery
-              </li>
-              <li className="text-xl text-gray-700 hover:text-blue-600 cursor-pointer">
-                Contact
-              </li>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.id}
+                  to={link.id}
+                  smooth={true}
+                  offset={-70}
+                  duration={500}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-xl text-gray-700 hover:text-blue-600 cursor-pointer"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </ul>
+
+            {/* Tombol Tiket Mobile */}
+            <Link
+              to="tiket"
+              smooth={true}
+              offset={-70}
+              duration={500}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-6 py-3 rounded-xl shadow w-full"
+              >
+                Pesan Tiket
+              </motion.button>
+            </Link>
           </div>
         </div>
       </div>
     </nav>
   );
 }
-// Hero component
+
 export function Hero() {
   return (
     <motion.section
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="w-full h-screen flex flex-col items-center justify-center bg-white text-center px-4 pt-8 pb-20 md:pt-12 md:pb-24" // Mengurangi padding atas
+      id="home"
+      className="w-full h-screen flex flex-col items-center justify-center bg-white text-center px-4 pt-8 pb-20 md:pt-12 md:pb-24"
     >
-      <h1 className="text-6xl md:text-7xl font-bold text-blue-600 mb-4 md:mb-8">
+      <h1 className="text-5xl md:text-7xl font-bold text-blue-600 mb-4 md:mb-8">
         Selamat Datang di Website Kami
       </h1>
       <p className="text-lg md:text-xl text-blue-500 max-w-3xl mb-8 md:mb-6 mx-auto">
@@ -124,29 +168,31 @@ export function Hero() {
 
       {/* Tombol Aksi */}
       <div className="flex gap-6 flex-wrap justify-center">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 text-lg px-8 py-4 rounded-xl transition-shadow shadow"
-        >
-          Lihat Wahana
-        </motion.button>
+        <Link to="wahana" smooth={true} offset={-70} duration={500}>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 text-lg px-8 py-4 rounded-xl transition-shadow shadow"
+          >
+            Lihat Wahana
+          </motion.button>
+        </Link>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-4 rounded-xl shadow transition-shadow"
-        >
-          Pesan Tiket
-        </motion.button>
+        <Link to="tiket" smooth={true} offset={-70} duration={500}>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-4 rounded-xl shadow transition-shadow"
+          >
+            Pesan Tiket
+          </motion.button>
+        </Link>
       </div>
     </motion.section>
   );
 }
 
-// Home1 component
-
-export function Home1() {
+export function Galeri() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
 
@@ -165,6 +211,7 @@ export function Home1() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
+      id="galeri"
       className="w-full bg-blue-600 rounded-t-3xl px-6 py-16 z-10"
     >
       <div className="max-w-6xl mx-auto mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -218,7 +265,10 @@ export function Home1() {
 
 export function AboutSection() {
   return (
-    <section className="w-full min-h-screen bg-white py-20 px-6 flex items-center">
+    <section
+      id="tentang"
+      className="w-full min-h-screen bg-white py-20 px-6 flex items-center"
+    >
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Kolom Foto */}
         <motion.div
@@ -264,6 +314,83 @@ export function AboutSection() {
     </section>
   );
 }
+export function WahanaSection() {
+  const cards = [
+    {
+      img: "ss1.png",
+      title: "Dino Park",
+      desc: "Jelajahi dunia dinosaurus dengan pengalaman edukatif dan interaktif.",
+    },
+    {
+      img: "ss2.png",
+      title: "Legend Star",
+      desc: "Bertemu dengan tokoh-tokoh legenda dalam wahana penuh cerita dan atraksi.",
+    },
+    {
+      img: "ss3.png",
+      title: "Fun Tech Plaza",
+      desc: "Wahana teknologi seru untuk anak-anak dan remaja penuh inovasi.",
+    },
+    {
+      img: "ss4.png",
+      title: "Milenial Glow Garden",
+      desc: "Taman cahaya modern dengan berbagai spot foto dan pertunjukan malam.",
+    },
+  ];
+
+  return (
+    <section id="wahana" className="w-full h-full bg-white py-28 px-6">
+      <div className="max-w-6xl mx-auto">
+        <motion.h2
+          className="text-5xl md:text-6xl font-bold text-blue-600 text-center mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          viewport={{ once: true }}
+        >
+          Wahana Kami
+        </motion.h2>
+
+        <motion.p
+          className="text-lg text-center text-gray-600 mb-24 max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          Temukan berbagai wahana menarik dan menyenangkan yang cocok untuk
+          keluarga, anak-anak, dan remaja. Setiap wahana menawarkan pengalaman
+          unik yang tak terlupakan.
+        </motion.p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {cards.map((card, i) => (
+            <motion.div
+              key={i}
+              className="group bg-gray-100 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 cursor-pointer"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.2, duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <img
+                src={card.img}
+                alt={card.title}
+                className="w-full h-[300px] object-cover rounded-xl mb-4 transition duration-300 group-hover:scale-105"
+              />
+              <h3 className="text-xl font-semibold text-black mb-2 transition duration-300 group-hover:-translate-y-1">
+                {card.title}
+              </h3>
+              <p className="text-black transition duration-300 group-hover:-translate-y-1">
+                {card.desc}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function TicketSection() {
   ``;
@@ -279,7 +406,10 @@ export function TicketSection() {
   ];
 
   return (
-    <section className="w-full  bg-blue-600 text-white px-4 py-20">
+    <section
+      id="tiket"
+      className="w-full  bg-blue-600 text-white px-4 py-20 rounded-t-3xl"
+    >
       <div className="max-w-6xl mx-auto mt-24">
         {/* Header Text */}
         <div className="text-center mb-10">
@@ -445,15 +575,228 @@ export function TicketSection() {
   );
 }
 
+export function ContactUsSection() {
+  return (
+    <section id="kontak" className="w-full h-full bg-blue-600 py-28 px-8">
+      <div className="max-w-7xl mx-auto">
+        <motion.h2
+          className="text-4xl md:text-5xl mt-10 font-bold text-white text-center mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          viewport={{ once: true }}
+        >
+          Hubungi Kami
+        </motion.h2>
+
+        <motion.p
+          className="text-lg text-center text-white mb-20 max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          Jika Anda memiliki pertanyaan, butuh informasi lebih lanjut, atau
+          ingin menjalin kerja sama, silakan hubungi kami melalui informasi di
+          bawah ini.
+        </motion.p>
+
+        <motion.div
+          className="bg-white rounded-3xl shadow-2xl p-10 md:p-16 grid grid-cols-1 md:grid-cols-2 gap-14 text-gray-800"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          {/* Informasi Kontak */}
+          <motion.div
+            className="space-y-12"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            {/* Alamat */}
+            <div>
+              <h3 className="text-2xl font-semibold border-b border-gray-300 pb-3 mb-4">
+                Alamat
+              </h3>
+              <p className="text-lg leading-relaxed">
+                Jl. Ir. Soekarno No.144, Beji, Kec. Junrejo, Kota Batu, Jawa
+                Timur 65236
+              </p>
+            </div>
+
+            {/* Email */}
+            <div>
+              <h3 className="text-2xl font-semibold border-b border-gray-300 pb-3 mb-4">
+                Email
+              </h3>
+              <a
+                href="mailto:info@jatimpark3.com"
+                className="text-lg text-blue-600 underline hover:text-blue-800"
+              >
+                info@jatimpark3.com
+              </a>
+            </div>
+
+            {/* Jam Operasional */}
+            <div>
+              <h3 className="text-2xl font-semibold border-b border-gray-300 pb-3 mb-4">
+                Jam Operasional
+              </h3>
+              <p className="text-lg">Senin - Minggu: 11.00 - 20.00 WIB</p>
+            </div>
+          </motion.div>
+
+          {/* Google Map */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <iframe
+              title="Lokasi Jatim Park 3"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3955.109506358879!2d112.54543957420514!3d-7.560021692459998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd628d4a5a2b3f5%3A0xb1f7340d69d88ad5!2sJatim%20Park%203!5e0!3m2!1sen!2sid!4v1683108309244!5m2!1sen!2sid"
+              width="100%"
+              height="360"
+              loading="lazy"
+              allowFullScreen
+              className="rounded-xl shadow-md"
+            ></iframe>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+export function Footer() {
+  return (
+    <footer className="relative bg-white text-gray-700 border-t border-gray-200">
+      {/* SVG Wave */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180 -translate-y-full">
+        <svg
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+          className="w-full h-20 fill-blue-600"
+        >
+          <path d="M0,0V46.29c47.84,22,103.45,38.35,163,28,56.84-10,112-39,172-39s111.33,29,172,39,115.24-6.45,172-28c59.55-22,115.16-38.35,163-28V0Z" />
+        </svg>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-4 gap-10 relative z-10">
+        {/* Logo / Brand */}
+        <div>
+          <h2 className="text-2xl font-bold text-blue-600 mb-4">
+            Jatim Park 3
+          </h2>
+          <p className="text-sm leading-relaxed">
+            Tempat wisata edukasi, hiburan, dan pengalaman luar biasa untuk
+            seluruh keluarga.
+          </p>
+        </div>
+
+        {/* Navigasi */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Navigasi</h3>
+          <ul className="space-y-2 text-sm">
+            {["home", "wahana", "ticket", "kontak"].map((id) => (
+              <li key={id}>
+                <Link
+                  to={id}
+                  smooth={true}
+                  duration={500}
+                  offset={-70}
+                  className="cursor-pointer hover:text-blue-600 transition-colors"
+                >
+                  {id.charAt(0).toUpperCase() + id.slice(1)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Kontak */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Kontak</h3>
+          <ul className="space-y-3 text-sm">
+            <li className="flex items-center gap-2">
+              <FaMapMarkerAlt className="text-blue-600" />
+              Jl. Ir. Soekarno No.144, Batu, Jawa Timur
+            </li>
+            <li className="flex items-center gap-2">
+              <FaEnvelope className="text-blue-600" />
+              info@jatimpark3.com
+            </li>
+          </ul>
+        </div>
+
+        {/* Sosial Media */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Ikuti Kami</h3>
+          <div className="flex space-x-5 text-2xl">
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noreferrer"
+              className="transition transform hover:scale-125"
+            >
+              <FaInstagram className="text-pink-600" />
+            </a>
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noreferrer"
+              className="transition transform hover:scale-125"
+            >
+              <FaFacebookF className="text-blue-700" />
+            </a>
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              rel="noreferrer"
+              className="transition transform hover:scale-125"
+            >
+              <FaYoutube className="text-red-600" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Bottom */}
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-t border-gray-100">
+        <div className="text-center text-sm py-5">
+          <marquee
+            behavior="scroll"
+            direction="left"
+            className="text-blue-700 font-medium"
+          >
+            Terima kasih telah mengunjungi Jatim Park 3 — Ayo liburan seru
+            bareng keluarga dan teman!
+          </marquee>
+          <p className="mt-2 text-gray-500">
+            &copy; {new Date().getFullYear()} Jatim Park 3. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 // Main App component
 function App() {
   return (
     <div>
       <Navbar />
       <Hero />
-      <Home1 />
+      <Galeri />
       <AboutSection />
+      <WahanaSection />
       <TicketSection />
+      <ContactUsSection />
+      <Footer />
     </div>
   );
 }
