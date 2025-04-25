@@ -159,7 +159,7 @@ export function Hero() {
       className="w-full h-screen flex flex-col items-center justify-center bg-white text-center px-4 pt-8 pb-20 md:pt-12 md:pb-24"
     >
       <h1 className="text-5xl md:text-7xl font-bold text-blue-600 mb-4 md:mb-8">
-        Selamat Datang di Website Kami
+        Petualangan Edukatif Dalam Satu Tempat !
       </h1>
       <p className="text-lg md:text-xl text-blue-500 max-w-3xl mb-8 md:mb-6 mx-auto">
         Kami menyediakan informasi lengkap dan galeri menarik untuk Anda.
