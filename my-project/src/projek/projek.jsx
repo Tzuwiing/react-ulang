@@ -156,37 +156,42 @@ export function Hero() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       id="home"
-      className="w-full h-screen flex flex-col items-center justify-center bg-white text-center px-4 pt-8 pb-20 md:pt-12 md:pb-24"
+      className="w-full h-screen flex flex-col items-center justify-center bg-cover bg-center text-center px-4 pt-8 pb-20 md:pt-12 md:pb-24"
+      style={{ backgroundImage: "url('hero.jpg')" }} // Ganti '/your-image-path.jpg' dengan path foto kamu
     >
-      <h1 className="text-5xl md:text-7xl font-bold text-blue-600 mb-4 md:mb-8">
-        Petualangan Edukatif Dalam Satu Tempat !
-      </h1>
-      <p className="text-lg md:text-xl text-blue-500 max-w-3xl mb-8 md:mb-6 mx-auto">
-        Kami menyediakan informasi lengkap dan galeri menarik untuk Anda.
-        Jelajahi lebih lanjut dan hubungi kami jika ada pertanyaan.
-      </p>
+      <div className="bg-black/50 w-full h-full absolute top-0 left-0"></div>{" "}
+      {/* Overlay hitam transparan */}
+      <div className="relative z-10 flex flex-col items-center">
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 md:mb-8">
+          Petualangan Edukatif Dalam Satu Tempat!
+        </h1>
+        <p className="text-lg md:text-xl text-white max-w-3xl mb-8 md:mb-6 mx-auto">
+          Kami menyediakan informasi lengkap dan galeri menarik untuk Anda.
+          Jelajahi lebih lanjut dan hubungi kami jika ada pertanyaan.
+        </p>
 
-      {/* Tombol Aksi */}
-      <div className="flex gap-6 flex-wrap justify-center">
-        <Link to="wahana" smooth={true} offset={-70} duration={500}>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 text-lg px-8 py-4 rounded-xl transition-shadow shadow"
-          >
-            Lihat Wahana
-          </motion.button>
-        </Link>
+        {/* Tombol Aksi */}
+        <div className="flex gap-6 flex-wrap justify-center">
+          <Link to="wahana" smooth={true} offset={-70} duration={500}>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-transparent border border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4 rounded-xl transition-shadow shadow"
+            >
+              Lihat Wahana
+            </motion.button>
+          </Link>
 
-        <Link to="tiket" smooth={true} offset={-70} duration={500}>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-4 rounded-xl shadow transition-shadow"
-          >
-            Pesan Tiket
-          </motion.button>
-        </Link>
+          <Link to="tiket" smooth={true} offset={-70} duration={500}>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-white hover:bg-gray-100 text-blue-600 text-lg px-8 py-4 rounded-xl shadow transition-shadow"
+            >
+              Pesan Tiket
+            </motion.button>
+          </Link>
+        </div>
       </div>
     </motion.section>
   );
@@ -212,10 +217,10 @@ export function Galeri() {
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       id="galeri"
-      className="w-full bg-blue-600 rounded-t-3xl px-6 py-16 z-10"
+      className="w-full bg-blue-600 rounded-t-3xl px-6 py-16 relative z-10" // tetap relative untuk positioning biasa
     >
       <div className="max-w-6xl mx-auto mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {["ss1.png", "ss2.png", "ss3.png", "ss4.png"].map((img, i) => (
+        {["gf1.jpg", "g2.jpg", "g3.jpg", "g4.jpg"].map((img, i) => (
           <motion.div
             key={i}
             whileHover={{ scale: 1.03 }}
@@ -235,7 +240,7 @@ export function Galeri() {
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-60 cursor-zoom-out"
+            className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[9999] cursor-zoom-out" // z-[9999] biar paling atas
             onClick={closeModal}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -244,7 +249,7 @@ export function Galeri() {
           >
             <motion.div
               className="bg-white p-2 rounded-xl relative max-w-5xl w-full mx-6"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()} // Supaya klik di foto tidak nutup modal
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
@@ -280,13 +285,13 @@ export function AboutSection() {
         >
           {/* Gambar Utama */}
           <img
-            src="ss3.png"
+            src="abt2.jpg"
             alt="Wahana 1"
             className="rounded-2xl shadow-lg w-[90%] object-cover"
           />
           {/* Gambar Tumpang Tindih - pojok kiri bawah */}
           <img
-            src="ss2.png"
+            src="abt1.jpg "
             alt="Wahana 2"
             className="absolute bottom-[-40px] left-[-10px] md:left-[-40px] w-[45%] md:w-[40%] rounded-2xl shadow-xl border-4 border-white"
           />
@@ -317,22 +322,22 @@ export function AboutSection() {
 export function WahanaSection() {
   const cards = [
     {
-      img: "ss1.png",
+      img: "dino1.jpg",
       title: "Dino Park",
       desc: "Jelajahi dunia dinosaurus dengan pengalaman edukatif dan interaktif.",
     },
     {
-      img: "ss2.png",
+      img: "star.jpg",
       title: "Legend Star",
       desc: "Bertemu dengan tokoh-tokoh legenda dalam wahana penuh cerita dan atraksi.",
     },
     {
-      img: "ss3.png",
+      img: "fun.jpg",
       title: "Fun Tech Plaza",
       desc: "Wahana teknologi seru untuk anak-anak dan remaja penuh inovasi.",
     },
     {
-      img: "ss4.png",
+      img: "mgg.jpg",
       title: "Milenial Glow Garden",
       desc: "Taman cahaya modern dengan berbagai spot foto dan pertunjukan malam.",
     },
